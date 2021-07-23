@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: compro-prod
-        image: hansenfernando/landing-prod:latest
+        image: hansenfernando/cilsylandingpage-prod:latest
         ports:
         - containerPort: 80
 ---
@@ -60,9 +60,9 @@ metadata:
      nginx.ingress.kubernetes.io/session-cookie-hash: sha1
 spec:
   rules:
-  - host: *      
+  - host: cilsy-landingpage.hansenfernando.xyz      
     http:
       paths:
         - backend:
-             serviceName: compro-svc-prod
-             servicePort: 80
+           serviceName: compro-svc-prod
+           servicePort: 80
