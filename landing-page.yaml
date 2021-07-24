@@ -1,30 +1,30 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cilsy-prod
+  name: cilsy-staging
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: cilsy-prod
-  name: compro-prod
+  namespace: cilsy-staging
+  name: compro-staging
   labels:
-    app: compro-prod
+    app: compro-staging
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: compro-prod
+      app: compro-staging
   template:
     metadata:
       labels:
-        app: compro-prod
+        app: compro-staging
     spec:
       containers:
-      - name: compro-prod
-        image: hansenfernando/cilsylandingpage-prod:latest
+      - name: compro-staging
+        image: hansenfernando/cilsylandingpage-staging:latest
         ports:
         - containerPort: 80
 ---
@@ -32,11 +32,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: cilsy-prod       
-  name: compro-svc-prod
+  namespace: cilsy-staging
+  name: compro-svc-staging
 spec:
   selector:
-    app: compro-prod
+    app: compro-staging
   ports:
   - protocol: TCP
     port: 80
@@ -47,12 +47,12 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  namespace: cilsy-prod
-  name: compro-ingress-prod
+  namespace: cilsy-staging
+  name: compro-ingress-staging
   annotations:
      kubernetes.io/ingress.class: "nginx"
      nginx.ingress.kubernetes.io/affinity: "cookie"
-     nginx.ingress.kubernetes.io/session-cookie-name: "compro-prod-cookie"
+     nginx.ingress.kubernetes.io/session-cookie-name: "compro-staging-cookie"
      nginx.ingress.kubernetes.io/session-cookie-expires: "86400"
      nginx.ingress.kubernetes.io/session-cookie-max-age: "86400"
      nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -60,9 +60,9 @@ metadata:
      nginx.ingress.kubernetes.io/session-cookie-hash: sha1
 spec:
   rules:
-  - host: cilsy-landingpage.hansenfernando.xyz      
+  - host: staging-landingpage.hansenfernando.xyz      
     http:
       paths:
         - backend:
-           serviceName: compro-svc-prod
+           serviceName: compro-svc-staging
            servicePort: 80
